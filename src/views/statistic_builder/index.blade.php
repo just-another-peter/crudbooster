@@ -86,8 +86,7 @@
     <link rel="stylesheet"
         href="{{ asset('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
     <script src="{{ asset('vendor/crudbooster/assets/adminlte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}">
-    </script>
+    <script src="{{ asset('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
     <!--END HERE-->
 @endpush
 
@@ -252,7 +251,7 @@
                                 $('#' + areaname).append("<div id='area-loading-" + obj
                                     .componentID +
                                     "' class='area-loading'><i class='fa fa-spin fa-spinner'></i></div>"
-                                    );
+                                );
                                 $.get("{{ CRUDBooster::adminpath('statistic_builder/view-component') }}/" +
                                     obj.componentID,
                                     function(view) {
@@ -358,15 +357,15 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Modal title</h4>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <p>One fine body&hellip;</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn-submit btn btn-primary" data-loading-text="Saving..."
                     autocomplete="off">Save changes</button>
             </div>

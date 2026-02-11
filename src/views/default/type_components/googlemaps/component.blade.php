@@ -1,69 +1,73 @@
 <div class='form-group peta {{ $header_group_class }} {{ $errors->first($name) ? 'has-error' : '' }}'>
-    <label class='control-label col-sm-2'>{{ $form['label'] }}
-        @if ($required)
-            <span class='text-danger' title='{!! cbLang('this_field_is_required') !!}'>*</span>
-        @endif
-    </label>
+    <div class="row">
+        <label class='col-form-label col-sm-2'>{{ $form['label'] }}
+            @if ($required)
+                <span class='text-danger' title='{!! cbLang('this_field_is_required') !!}'>*</span>
+            @endif
+        </label>
 
-    <div class="{{ $col_width ?: 'col-sm-10' }}">
-
-
-        <div class="input-group">
-            <input type="text" class="form-control" id="{{ $name }}" {{ $readonly ? 'readonly' : '' }}
-                {{ $required ? 'required' : '' }} value="{{ $value }}" name="{{ $name }}">
-            <input type="hidden" name="input-latitude-{{ $name }}" id="input-latitude-{{ $name }}"
-                value="{{ $form['latitude'] ? $row->$form['latitude'] : 0 }}">
-            <input type="hidden" name="input-longitude-{{ $name }}" id="input-longitude-{{ $name }}"
-                value="{{ $form['longitude'] ? $row->$form['longitude'] : 0 }}">
-            <span class="input-group-btn">
-                <button class="btn btn-primary" onclick="showMapModal{{ $name }}()" type="button"><i
-                        class='fa fa-map-marker'></i> Browse Map</button>
-            </span>
-        </div><!-- /input-group -->
+        <div class="{{ $col_width ?: 'col-sm-10' }}">
 
 
-        <div id='googlemaps-modal-{{ $name }}' class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title"><i class='fa fa-search'></i> Browse Map</h4>
-                    </div>
-                    <div class="modal-body">
+            <div class="input-group">
+                <input type="text" class="form-control" id="{{ $name }}" {{ $readonly ? 'readonly' : '' }}
+                    {{ $required ? 'required' : '' }} value="{{ $value }}" name="{{ $name }}">
+                <input type="hidden" name="input-latitude-{{ $name }}" id="input-latitude-{{ $name }}"
+                    value="{{ $form['latitude'] ? $row->$form['latitude'] : 0 }}">
+                <input type="hidden" name="input-longitude-{{ $name }}"
+                    id="input-longitude-{{ $name }}"
+                    value="{{ $form['longitude'] ? $row->$form['longitude'] : 0 }}">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" onclick="showMapModal{{ $name }}()" type="button"><i
+                            class='fa fa-map-marker'></i> Browse Map</button>
+                </span>
+            </div><!-- /input-group -->
 
-                        <input id="input-search-autocomplete-{{ $name }}" class="controls pac-input" autofocus
-                            type="text" placeholder="Search location here...">
-                        <div id="type-selector-{{ $name }}" class="controls hide type-selector">
-                            <input type="radio" name="type" id="changetype-all" checked="checked">
-                            <label for="changetype-all">All</label>
 
-                            <input type="radio" name="type" id="changetype-establishment">
-                            <label for="changetype-establishment">Establishments</label>
-
-                            <input type="radio" name="type" id="changetype-address">
-                            <label for="changetype-address">Addresses</label>
-
-                            <input type="radio" name="type" id="changetype-geocode">
-                            <label for="changetype-geocode">Geocodes</label>
+            <div id='googlemaps-modal-{{ $name }}' class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"><i class='fa fa-search'></i> Browse Map</h4>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
                         </div>
-                        <div class="map" id='map-{{ $name }}'></div>
-                        <br />
-                        <p>
-                            <span class="text-info" style="font-weight: bold">Current Location :</span><br />
-                            <span id='current-location-span-{{ $name }}'>{{ $value ? $value : '-' }}</span>
-                        </p>
+                        <div class="modal-body">
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" onclick="setIt{{ $name }}()"
-                            data-dismiss="modal">Set It</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                            <input id="input-search-autocomplete-{{ $name }}" class="controls pac-input"
+                                autofocus type="text" placeholder="Search location here...">
+                            <div id="type-selector-{{ $name }}" class="controls hide type-selector">
+                                <input type="radio" name="type" id="changetype-all" checked="checked">
+                                <label for="changetype-all">All</label>
+
+                                <input type="radio" name="type" id="changetype-establishment">
+                                <label for="changetype-establishment">Establishments</label>
+
+                                <input type="radio" name="type" id="changetype-address">
+                                <label for="changetype-address">Addresses</label>
+
+                                <input type="radio" name="type" id="changetype-geocode">
+                                <label for="changetype-geocode">Geocodes</label>
+                            </div>
+                            <div class="map" id='map-{{ $name }}'></div>
+                            <br />
+                            <p>
+                                <span class="text-info" style="font-weight: bold">Current Location :</span><br />
+                                <span
+                                    id='current-location-span-{{ $name }}'>{{ $value ? $value : '-' }}</span>
+                            </p>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="setIt{{ $name }}()"
+                                data-bs-dismiss="modal">Set It</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
 
 
+        </div>
     </div>
 </div>
 @push('bottom')

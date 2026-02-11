@@ -22,13 +22,20 @@
     @endpush
 
     <ul class="nav nav-tabs">
-        <li role="presentation"><a href="{{ Route('ModulsControllerGetStep1') . '/' . $id }}"><i class='fa fa-info'></i> Step 1 -
+        <li class="nav-item" role="presentation"><a class="nav-link"
+                href="{{ Route('ModulsControllerGetStep1') . '/' . $id }}"><i class='fa fa-info'></i> Step 1
+                -
                 Module Information</a></li>
-        <li role="presentation"><a href="{{ Route('ModulsControllerGetStep2') . '/' . $id }}"><i class='fa fa-table'></i> Step 2 -
+        <li class="nav-item" role="presentation"><a class="nav-link"
+                href="{{ Route('ModulsControllerGetStep2') . '/' . $id }}"><i class='fa fa-table'></i> Step
+                2 -
                 Table Display</a></li>
-        <li role="presentation" class="active"><a href="{{ Route('ModulsControllerGetStep3') . '/' . $id }}"><i
-                    class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
-        <li role="presentation"><a href="{{ Route('ModulsControllerGetStep4') . '/' . $id }}"><i class='fa fa-wrench'></i> Step
+        <li class="nav-item" role="presentation"><a class="nav-link active text-black"
+                href="{{ Route('ModulsControllerGetStep3') . '/' . $id }}"><i class='fa fa-plus-square-o'></i> Step 3 - Form
+                Display</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link"
+                href="{{ Route('ModulsControllerGetStep4') . '/' . $id }}"><i class='fa fa-wrench'></i>
+                Step
                 4 - Configuration</a></li>
     </ul>
     @push('head')
@@ -442,26 +449,26 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"><i class='fa fa-cog'></i> Options</h4>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <p>One fine body&hellip;</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn-save-option btn btn-primary">Save changes</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <div class="box box-default">
-        <div class="box-header with-border">
-            <h3 class="box-title">Form Display</h3>
+    <div class="card">
+        <div class="card-header with-border">
+            <h3 class="card-title">Form Display</h3>
         </div>
-        <div class="box-body">
+        <div class="card-body">
             <form method="post" autocomplete="off" action="{{ Route('ModulsControllerPostStep4') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="id" value="{{ $id }}">
@@ -496,7 +503,7 @@
                                         name='validation[]' value='required' placeholder='Enter Laravel Validation' />
                                 </td>
                                 <td>
-                                    <select class='form-control width' name='width[]'>
+                                    <select class='form-select width' name='width[]'>
                                         @for ($i = 10; $i >= 1; $i--)
                                             <option {{ ($form['width'] ?? false) == "col-sm-$i" ? 'selected' : '' }}
                                                 value='col-sm-{{ $i }}'>{{ $i }}</option>
@@ -510,7 +517,7 @@
                                         <?php
 
                                     $type = $form["type"] ?: "text";
-                                    $types = base_path('vendor/samyeung/crudbooster/src/views/default/type_components/'.$type.'/info.json');
+                                    $types = base_path('vendor/just-another-peter/crudbooster/src/views/default/type_components/'.$type.'/info.json');
                                     $types = file_get_contents($types);
                                     $types = json_decode($types);
 
@@ -546,7 +553,8 @@
 
                                         <div class="form-group">
                                             <label>{{ $key }}</label>
-                                            <input type="text" name="option[{{ $index }}][{{ $key }}]"
+                                            <input type="text"
+                                                name="option[{{ $index }}][{{ $key }}]"
                                                 placeholder="{{ $val->placeholder }}" value="{{ $value }}"
                                                 class="form-control">
                                         </div>
@@ -630,7 +638,7 @@
                                     onclick="showValidationSuggest(this)" onkeyup="showValidationSuggestLike(this)"
                                     name='validation[]' value='required' placeholder='Enter Laravel Validation' /></td>
                             <td>
-                                <select class='form-control width' name='width[]'>
+                                <select class='form-select width' name='width[]'>
                                     @for ($i = 10; $i >= 1; $i--)
                                         <option {{ $i == 9 ? 'selected' : '' }} value='col-sm-{{ $i }}'>
                                             {{ $i }}</option>
@@ -660,7 +668,7 @@
                 </table>
 
         </div>
-        <div class="box-footer">
+        <div class="card-footer">
             <div align="right">
                 <button type="button" onclick="location.href='{{ CRUDBooster::mainpath('step2') . '/' . $id }}'"
                     class="btn btn-default">&laquo; Back</button>

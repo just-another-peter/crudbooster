@@ -5,14 +5,14 @@
             <div class="panel-heading">
                 [name]
             </div>
-            <div class="panel-body table-responsive no-padding">
+            <div class="panel-body table-responsive p-0">
                 [sql]
             </div>
         </div>
 
-        <div class='action pull-right'>
+        <div class='action float-end'>
             <a href='javascript:void(0)' data-componentid='{{ $componentID }}' data-name='Small Box'
-                class='btn-edit-component'><i class='fa fa-pencil'></i></a>
+                class='btn-edit-component'><i class='fa fa-pen'></i></a>
             &nbsp;
             <a href='javascript:void(0)' data-componentid='{{ $componentID }}' class='btn-delete-component'><i
                     class='fa fa-trash'></i></a>

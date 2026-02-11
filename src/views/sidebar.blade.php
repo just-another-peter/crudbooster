@@ -1,50 +1,70 @@
 <!-- Left side column. contains the sidebar -->
-<aside class="main-sidebar">
 
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="{{ url(config('crudbooster.ADMIN_PATH')) }}" class="brand-link text-lg" title="{{ Session::get('appname') }}">
+        <span class="brand-text font-weight-light">{{ CRUDBooster::getSetting('appname') }}</span>
+    </a>
 
-        <!-- Sidebar user panel (optional) -->
-        <div class="user-panel">
-            <div class="pull-{{ cbLang('left') }} image">
-                <img src="{{ CRUDBooster::myPhoto() }}" class="img-circle" alt="{{ cbLang('user_image') }}"/>
+    <!-- Sidebar -->
+    <div class="sidebar sidebar-dark-success">
+
+        <!-- Sidebar user panel (optional but common) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{{ CRUDBooster::myPhoto() }}" class="img-circle elevation-2" alt="{{ cbLang('user_image') }}">
             </div>
-            <div class="pull-{{ cbLang('left') }} info">
-                <p>{{ CRUDBooster::myName() }}</p>
-                <!-- Status -->
-                <a href="#"><i class="fa fa-circle text-success"></i> {{ cbLang('online') }}</a>
+            <div class="info">
+                <a href="#" class="d-block text-white">{{ CRUDBooster::myName() }}</a>
             </div>
         </div>
 
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-legacy nav-flat text-sm" data-widget="treeview" role="menu"
+                data-accordion="false">
 
-        <div class='main-menu'>
+                <li class="nav-header">{{ cbLang('menu_navigation') }}</li>
 
-            <!-- Sidebar Menu -->
-            <ul class="sidebar-menu">
-                <li class="header">{{cbLang("menu_navigation")}}</li>
-                <!-- Optionally, you can add icons to the links -->
-
-                <?php $dashboard = CRUDBooster::sidebarDashboard();?>
-                @if($dashboard)
-                    <li data-id='{{$dashboard->id}}' class="{{ (Request::is(config('crudbooster.ADMIN_PATH'))) ? 'active' : '' }}"><a
-                                href='{{CRUDBooster::adminPath()}}' class='{{($dashboard->color)?"text-".$dashboard->color:""}}'><i class='fa fa-dashboard'></i>
-                            <span>{{cbLang("text_dashboard")}}</span> </a></li>
+                {{-- Dashboard (if enabled) --}}
+                @php
+                    $dashboard = false; // or CRUDBooster::sidebarDashboard();
+                @endphp
+                @if ($dashboard)
+                    <li class="nav-item">
+                        <a href="{{ CRUDBooster::adminPath() }}"
+                            class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH')) ? 'active' : '' }}">
+                            <i
+                                class="nav-icon fa fa-tachometer-alt {{ $dashboard->color ? 'text-' . $dashboard->color : '' }}"></i>
+                            <p>{{ cbLang('text_dashboard') }}</p>
+                        </a>
+                    </li>
                 @endif
 
-                @foreach(CRUDBooster::sidebarMenu() as $menu)
-                    <li data-id='{{$menu->id}}' class='{{(!empty($menu->children))?"treeview":""}} {{ (Request::is($menu->url_path."*"))?"active":""}}'>
-                        <a href='{{ ($menu->is_broken)?"javascript:alert('".cbLang('controller_route_404')."')":$menu->url }}'
-                           class='{{($menu->color)?"text-".$menu->color:""}}'>
-                            <i class='{{$menu->icon}} {{($menu->color)?"text-".$menu->color:""}}'></i> <span>{{$menu->name}}</span>
-                            @if(!empty($menu->children))<i class="fa fa-angle-{{ cbLang("right") }} pull-{{ cbLang("right") }}"></i>@endif
+                @foreach (CRUDBooster::sidebarMenu() as $menu)
+                    <li
+                        class="nav-item {{ !empty($menu->children) ? 'menu-open' : '' }} {{ Request::is($menu->url_path . '*') ? 'menu-open' : '' }}">
+                        <a href="{{ $menu->is_broken ? 'javascript:alert(\'' . cbLang('controller_route_404') . '\')' : $menu->url }}"
+                            class="nav-link {{ Request::is($menu->url_path . '*') ? 'active' : '' }}">
+                            <i
+                                class="nav-icon {{ $menu->icon }} {{ $menu->color ? 'text-' . $menu->color : '' }}"></i>
+                            <p>
+                                {{ $menu->name }}
+                                @if (!empty($menu->children))
+                                    <i class="right fa fa-angle-left"></i>
+                                @endif
+                            </p>
                         </a>
-                        @if(!empty($menu->children))
-                            <ul class="treeview-menu">
-                                @foreach($menu->children as $child)
-                                    <li data-id='{{$child->id}}' class='{{(Request::is($child->url_path .= !Str::endsWith(Request::decodedPath(), $child->url_path) ? "/*" : ""))?"active":""}}'>
-                                        <a href='{{ ($child->is_broken)?"javascript:alert('".cbLang('controller_route_404')."')":$child->url}}'
-                                           class='{{($child->color)?"text-".$child->color:""}}'>
-                                            <i class='{{$child->icon}}'></i> <span>{{$child->name}}</span>
+
+                        @if (!empty($menu->children))
+                            <ul class="nav nav-treeview">
+                                @foreach ($menu->children as $child)
+                                    <li class="nav-item">
+                                        <a href="{{ $child->is_broken ? 'javascript:alert(\'' . cbLang('controller_route_404') . '\')' : $child->url }}"
+                                            class="nav-link {{ Request::is($child->url_path . '*') ? 'active' : '' }}">
+                                            <i
+                                                class="fa {{$menu->icon}} nav-icon {{ $child->color ? 'text-' . $child->color : '' }}"></i>
+                                            <p>{{ $child->name }}</p>
                                         </a>
                                     </li>
                                 @endforeach
@@ -53,119 +73,247 @@
                     </li>
                 @endforeach
 
+                @if (CRUDBooster::isSuperadmin())
+                    <li class="nav-header">{{ cbLang('SUPERADMIN') }}</li>
 
-
-                @if(CRUDBooster::isSuperadmin())
-                    <li class="header">{{ cbLang('SUPERADMIN') }}</li>
-                    <li class='treeview'>
-                        <a href='#'><i class='fa fa-key'></i> <span>{{ cbLang('Privileges_Roles') }}</span> <i
-                                    class="fa fa-angle-{{ cbLang("right") }} pull-{{ cbLang("right") }}"></i></a>
-                        <ul class='treeview-menu'>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/privileges/add*')) ? 'active' : '' }}"><a
-                                        href='{{Route("PrivilegesControllerGetAdd")}}'>{{ ($current_path ?? false) }}<i class='fa fa-plus'></i>
-                                    <span>{{ cbLang('Add_New_Privilege') }}</span></a></li>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/privileges')) ? 'active' : '' }}"><a
-                                        href='{{Route("PrivilegesControllerGetIndex")}}'><i class='fa fa-bars'></i>
-                                    <span>{{ cbLang('List_Privilege') }}</span></a></li>
+                    <!-- Privileges / Roles -->
+                    <li
+                        class="nav-item {{ Request::is(config('crudbooster.ADMIN_PATH') . '/privileges*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-key"></i>
+                            <p>
+                                {{ cbLang('Privileges_Roles') }}
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ Route('PrivilegesControllerGetAdd') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/privileges/add*') ? 'active' : '' }}">
+                                    <i class="fa fa-plus nav-icon"></i>
+                                    <p>{{ cbLang('Add_New_Privilege') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ Route('PrivilegesControllerGetIndex') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/privileges') ? 'active' : '' }}">
+                                    <i class="fa fa-bars nav-icon"></i>
+                                    <p>{{ cbLang('List_Privilege') }}</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
-                    <li class='treeview'>
-                        <a href='#'><i class='fa fa-users'></i> <span>{{ cbLang('Users_Management') }}</span> <i
-                                    class="fa fa-angle-{{ cbLang("right") }} pull-{{ cbLang("right") }}"></i></a>
-                        <ul class='treeview-menu'>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/users/add*')) ? 'active' : '' }}"><a
-                                        href='{{Route("AdminCmsUsersControllerGetAdd")}}'><i class='fa fa-plus'></i>
-                                    <span>{{ cbLang('add_user') }}</span></a></li>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/users')) ? 'active' : '' }}"><a
-                                        href='{{Route("AdminCmsUsersControllerGetIndex")}}'><i class='fa fa-bars'></i>
-                                    <span>{{ cbLang('List_users') }}</span></a></li>
+                    <!-- Repeat similar pattern for Users, Menu Management, Settings, Module Generator, Statistic Builder, API Generator, Email Templates, Logs -->
+
+                    <!-- Users Management -->
+                    <li
+                        class="nav-item {{ Request::is(config('crudbooster.ADMIN_PATH') . '/users*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-users"></i>
+                            <p>
+                                {{ cbLang('Users_Management') }}
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ Route('AdminCmsUsersControllerGetAdd') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/users/add*') ? 'active' : '' }}">
+                                    <i class="fa fa-plus nav-icon"></i>
+                                    <p>{{ cbLang('add_user') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ Route('AdminCmsUsersControllerGetIndex') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/users') ? 'active' : '' }}">
+                                    <i class="fa fa-bars nav-icon"></i>
+                                    <p>{{ cbLang('List_users') }}</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
-                    <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/menu_management*')) ? 'active' : '' }}"><a
-                                href='{{Route("MenusControllerGetIndex")}}'><i class='fa fa-bars'></i>
-                            <span>{{ cbLang('Menu_Management') }}</span></a></li>
-                    <li class="treeview">
-                        <a href="#"><i class='fa fa-wrench'></i> <span>{{ cbLang('settings') }}</span> <i
-                                    class="fa fa-angle-{{ cbLang("right") }} pull-{{ cbLang("right") }}"></i></a>
-                        <ul class="treeview-menu">
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/settings/add*')) ? 'active' : '' }}"><a
-                                        href='{{route("SettingsControllerGetAdd")}}'><i class='fa fa-plus'></i>
-                                    <span>{{ cbLang('Add_New_Setting') }}</span></a></li>
-                            <?php
-                            $groupSetting = DB::table('cms_settings')->groupby('group_setting')->pluck('group_setting');
-                            foreach($groupSetting as $gs):
-                            ?>
-                            <li class="<?=($gs == Request::get('group')) ? 'active' : ''?>"><a
-                                        href='{{route("SettingsControllerGetShow")}}?group={{urlencode($gs)}}&m=0'><i class='fa fa-wrench'></i>
-                                    <span>{{$gs}}</span></a></li>
-                            <?php endforeach;?>
-                        </ul>
+                    <!-- Menu Management (single item, no subtree) -->
+                    <li class="nav-item">
+                        <a href="{{ Route('MenusControllerGetIndex') }}"
+                            class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/menu_management*') ? 'active' : '' }}">
+                            <i class="nav-icon fa fa-bars"></i>
+                            <p>{{ cbLang('Menu_Management') }}</p>
+                        </a>
                     </li>
-                    <li class='treeview'>
-                        <a href='#'><i class='fa fa-th'></i> <span>{{ cbLang('Module_Generator') }}</span> <i
-                                    class="fa fa-angle-{{ cbLang("right") }} pull-{{ cbLang("right") }}"></i></a>
-                        <ul class='treeview-menu'>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/module_generator/step1')) ? 'active' : '' }}"><a
-                                        href='{{Route("ModulsControllerGetStep1")}}'><i class='fa fa-plus'></i>
-                                    <span>{{ cbLang('Add_New_Module') }}</span></a></li>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/module_generator')) ? 'active' : '' }}"><a
-                                        href='{{Route("ModulsControllerGetIndex")}}'><i class='fa fa-bars'></i>
-                                    <span>{{ cbLang('List_Module') }}</span></a></li>
+
+                    <!-- Settings -->
+                    <li
+                        class="nav-item {{ Request::is(config('crudbooster.ADMIN_PATH') . '/settings*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-wrench"></i>
+                            <p>
+                                {{ cbLang('settings') }}
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('SettingsControllerGetAdd') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/settings/add*') ? 'active' : '' }}">
+                                    <i class="fa fa-plus nav-icon"></i>
+                                    <p>{{ cbLang('Add_New_Setting') }}</p>
+                                </a>
+                            </li>
+
+                            @php
+                                $groupSetting = DB::table('cms_settings')
+                                    ->select('group_setting')
+                                    ->groupBy('group_setting')
+                                    ->pluck('group_setting');
+                            @endphp
+
+                            @foreach ($groupSetting as $gs)
+                                <li class="nav-item">
+                                    <a href="{{ route('SettingsControllerGetShow') }}?group={{ urlencode($gs) }}&m=0"
+                                        class="nav-link {{ $gs == request()->get('group') ? 'active' : '' }}">
+                                        <i class="fa fa-wrench nav-icon"></i>
+                                        <p>{{ $gs }}</p>
+                                    </a>
+                                </li>
+                            @endforeach
                         </ul>
                     </li>
 
-                    <li class='treeview'>
-                        <a href='#'><i class='fa fa-dashboard'></i> <span>{{ cbLang('Statistic_Builder') }}</span> <i
-                                    class="fa fa-angle-{{ cbLang("right") }} pull-{{ cbLang("right") }}"></i></a>
-                        <ul class='treeview-menu'>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/statistic_builder/add')) ? 'active' : '' }}"><a
-                                        href='{{Route("StatisticBuilderControllerGetAdd")}}'><i class='fa fa-plus'></i>
-                                    <span>{{ cbLang('Add_New_Statistic') }}</span></a></li>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/statistic_builder')) ? 'active' : '' }}"><a
-                                        href='{{Route("StatisticBuilderControllerGetIndex")}}'><i class='fa fa-bars'></i>
-                                    <span>{{ cbLang('List_Statistic') }}</span></a></li>
+                    <!-- Module Generator -->
+                    <li
+                        class="nav-item {{ Request::is(config('crudbooster.ADMIN_PATH') . '/module_generator*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-th"></i>
+                            <p>
+                                {{ cbLang('Module_Generator') }}
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ Route('ModulsControllerGetStep1') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/module_generator/step1') ? 'active' : '' }}">
+                                    <i class="fa fa-plus nav-icon"></i>
+                                    <p>{{ cbLang('Add_New_Module') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ Route('ModulsControllerGetIndex') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/module_generator') ? 'active' : '' }}">
+                                    <i class="fa fa-bars nav-icon"></i>
+                                    <p>{{ cbLang('List_Module') }}</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
-                    <li class='treeview'>
-                        <a href='#'><i class='fa fa-fire'></i> <span>{{ cbLang('API_Generator') }}</span> <i
-                                    class="fa fa-angle-{{ cbLang("right") }} pull-{{ cbLang("right") }}"></i></a>
-                        <ul class='treeview-menu'>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/api_generator/generator*')) ? 'active' : '' }}"><a
-                                        href='{{Route("ApiCustomControllerGetGenerator")}}'><i class='fa fa-plus'></i>
-                                    <span>{{ cbLang('Add_New_API') }}</span></a></li>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/api_generator')) ? 'active' : '' }}"><a
-                                        href='{{Route("ApiCustomControllerGetIndex")}}'><i class='fa fa-bars'></i>
-                                    <span>{{ cbLang('list_API') }}</span></a></li>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/api_generator/screet-key*')) ? 'active' : '' }}"><a
-                                        href='{{Route("ApiCustomControllerGetScreetKey")}}'><i class='fa fa-bars'></i>
-                                    <span>{{ cbLang('Generate_Screet_Key') }}</span></a></li>
+                    <!-- Statistic Builder -->
+                    <li
+                        class="nav-item {{ Request::is(config('crudbooster.ADMIN_PATH') . '/statistic_builder*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-chart-bar"></i>
+                            <p>
+                                {{ cbLang('Statistic_Builder') }}
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ Route('StatisticBuilderControllerGetAdd') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/statistic_builder/add') ? 'active' : '' }}">
+                                    <i class="fa fa-plus nav-icon"></i>
+                                    <p>{{ cbLang('Add_New_Statistic') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ Route('StatisticBuilderControllerGetIndex') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/statistic_builder') ? 'active' : '' }}">
+                                    <i class="fa fa-bars nav-icon"></i>
+                                    <p>{{ cbLang('List_Statistic') }}</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
-                    <li class='treeview'>
-                        <a href='#'><i class='fa fa-envelope-o'></i> <span>{{ cbLang('Email_Templates') }}</span> <i
-                                    class="fa fa-angle-{{ cbLang("right") }} pull-{{ cbLang("right") }}"></i></a>
-                        <ul class='treeview-menu'>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/email_templates/add*')) ? 'active' : '' }}"><a
-                                        href='{{Route("EmailTemplatesControllerGetAdd")}}'><i class='fa fa-plus'></i>
-                                    <span>{{ cbLang('Add_New_Email') }}</span></a></li>
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/email_templates')) ? 'active' : '' }}"><a
-                                        href='{{Route("EmailTemplatesControllerGetIndex")}}'><i class='fa fa-bars'></i>
-                                    <span>{{ cbLang('List_Email_Template') }}</span></a></li>
+                    <!-- API Generator -->
+                    <li
+                        class="nav-item {{ Request::is(config('crudbooster.ADMIN_PATH') . '/api_generator*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-plug"></i>
+                            <p>
+                                {{ cbLang('API_Generator') }}
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ Route('ApiCustomControllerGetGenerator') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/api_generator/generator*') ? 'active' : '' }}">
+                                    <i class="fa fa-plus nav-icon"></i>
+                                    <p>{{ cbLang('Add_New_API') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ Route('ApiCustomControllerGetIndex') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/api_generator') ? 'active' : '' }}">
+                                    <i class="fa fa-bars nav-icon"></i>
+                                    <p>{{ cbLang('list_API') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ Route('ApiCustomControllerGetScreetKey') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/api_generator/screet-key*') ? 'active' : '' }}">
+                                    <i class="fa fa-bars nav-icon"></i>
+                                    <p>{{ cbLang('Generate_Screet_Key') }}</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
-                    <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/logs*')) ? 'active' : '' }}"><a href='{{Route("LogsControllerGetIndex")}}'><i
-                                    class='fa fa-flag'></i> <span>{{ cbLang('Log_User_Access') }}</span></a></li>
+                    <!-- Email Templates -->
+                    <li
+                        class="nav-item {{ Request::is(config('crudbooster.ADMIN_PATH') . '/email_templates*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-envelope"></i>
+                            <p>
+                                {{ cbLang('Email_Templates') }}
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ Route('EmailTemplatesControllerGetAdd') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/email_templates/add*') ? 'active' : '' }}">
+                                    <i class="fa fa-plus nav-icon"></i>
+                                    <p>{{ cbLang('Add_New_Email') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ Route('EmailTemplatesControllerGetIndex') }}"
+                                    class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/email_templates') ? 'active' : '' }}">
+                                    <i class="fa fa-bars nav-icon"></i>
+                                    <p>{{ cbLang('List_Email_Template') }}</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Logs (single item, no subtree) -->
+                    <li class="nav-item">
+                        <a href="{{ Route('LogsControllerGetIndex') }}"
+                            class="nav-link {{ Request::is(config('crudbooster.ADMIN_PATH') . '/logs*') ? 'active' : '' }}">
+                            <i class="nav-icon fa fa-clipboard-list"></i>
+                            <p>{{ cbLang('Log_User_Access') }}</p>
+                        </a>
+                    </li>
+
                 @endif
 
-            </ul><!-- /.sidebar-menu -->
-
-        </div>
-
-    </section>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
     <!-- /.sidebar -->
 </aside>

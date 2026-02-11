@@ -13,12 +13,12 @@
             @endif
         @endif
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <strong><i class='{{CRUDBooster::getCurrentModule()->icon}}'></i> {!! $page_title !!}</strong>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class='{{CRUDBooster::getCurrentModule()->icon}}'></i> {!! $page_title !!}</strong>
             </div>
 
-            <div class="panel-body" style="padding:20px 0px 0px 0px">
+            <div class="card-body" style="padding:20px 0px 0px 0px">
                 <?php
                 $action = (@$row) ? CRUDBooster::mainpath("edit-save/$row->id") : CRUDBooster::mainpath("add-save");
                 $return_url = ($return_url ?? false) ?: g('return_url');
@@ -31,45 +31,47 @@
                     @if($hide_form)
                         <input type="hidden" name="hide_form" value='{!! serialize($hide_form) !!}'>
                     @endif
-                    <div class="box-body" id="parent-form-area">
+                    <div class="card-body" id="parent-form-area">
 
                         @if(($command ?? false) == 'detail')
                             @include("crudbooster::default.form_detail")
                         @else
                             @include("crudbooster::default.form_body")
                         @endif
-                    </div><!-- /.box-body -->
+                    </div><!-- /.card-body -->
 
-                    <div class="box-footer" style="background: #F5F5F5">
+                    <div class="card-footer" style="background: #F5F5F5">
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2"></label>
-                            <div class="col-sm-10">
-                                @if($button_cancel && CRUDBooster::getCurrentMethod() != 'getDetail')
-                                    @if(g('return_url'))
-                                        <a href='{{g("return_url")}}' class='btn btn-default'><i
-                                                    class='fa fa-chevron-circle-left'></i> {{cbLang("button_back")}}</a>
-                                    @else
-                                        <a href='{{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}' class='btn btn-default'><i
-                                                    class='fa fa-chevron-circle-left'></i> {{cbLang("button_back")}}</a>
+                            <div class="row">
+                                <label class="control-label col-sm-2"></label>
+                                <div class="col-sm-10">
+                                    @if($button_cancel && CRUDBooster::getCurrentMethod() != 'getDetail')
+                                        @if(g('return_url'))
+                                            <a href='{{g("return_url")}}' class='btn btn-default'><i
+                                                        class='fa fa-chevron-circle-left'></i> {{cbLang("button_back")}}</a>
+                                        @else
+                                            <a href='{{CRUDBooster::mainpath("?".http_build_query(@$_GET)) }}' class='btn btn-default'><i
+                                                        class='fa fa-chevron-circle-left'></i> {{cbLang("button_back")}}</a>
+                                        @endif
                                     @endif
-                                @endif
-                                @if(CRUDBooster::isCreate() || CRUDBooster::isUpdate())
+                                    @if(CRUDBooster::isCreate() || CRUDBooster::isUpdate())
 
-                                    @if(CRUDBooster::isCreate() && $button_addmore==TRUE && ($command ?? false) == 'add')
-                                        <input type="submit" name="submit" value='{{cbLang("button_save_more")}}' class='btn btn-success'>
+                                        @if(CRUDBooster::isCreate() && $button_addmore==TRUE && ($command ?? false) == 'add')
+                                            <input type="submit" name="submit" value='{{cbLang("button_save_more")}}' class='btn btn-success'>
+                                        @endif
+
+                                        @if($button_save && (($command ?? false) ?? false) != 'detail')
+                                            <input type="submit" name="submit" value='{{cbLang("button_save")}}' class='btn btn-success'>
+                                        @endif
+
                                     @endif
-
-                                    @if($button_save && (($command ?? false) ?? false) != 'detail')
-                                        <input type="submit" name="submit" value='{{cbLang("button_save")}}' class='btn btn-success'>
-                                    @endif
-
-                                @endif
+                                </div>
                             </div>
                         </div>
 
 
-                    </div><!-- /.box-footer-->
+                    </div><!-- /.card-footer-->
 
                 </form>
 

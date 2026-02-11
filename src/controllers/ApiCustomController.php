@@ -144,6 +144,7 @@ class ApiCustomController extends CBController
         }
 
         $data['tables'] = $tables_list;
+        $data['row'] = null;
 
         return view('crudbooster::api_generator', $data);
     }

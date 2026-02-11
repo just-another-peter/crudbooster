@@ -19,24 +19,24 @@
 
     @if (Request::get('file') && Request::get('import'))
         <ul class='nav nav-tabs'>
-            <li style="background:#eeeeee"><a style="color:#111"
+            <li class="nav-item"><a class="nav-link" style="color:#111"
                     onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath('import-data') }}'"
                     href='javascript:;'><i class='fa fa-download'></i> Upload a File &raquo;</a></li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cogs'></i> Adjustment
+            <li class="nav-item"><a class="nav-link" style="color:#111" href='#'><i class='fa fa-cogs'></i> Adjustment
                     &raquo;</a></li>
-            <li style="background:#ffffff" class='active'><a style="color:#111" href='#'><i
-                        class='fa fa-cloud-download'></i> Importing &raquo;</a></li>
+            <li class='nav-item'><a class="nav-link active" style="color:#111" href='#'><i
+                        class='fa fa-cloud-download-alt'></i> Importing &raquo;</a></li>
         </ul>
 
         <!-- Box -->
-        <div id='box_main' class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">Importing</h3>
+        <div id='box_main' class="card">
+            <div class="card-header with-border">
+                <h3 class="card-title">Importing</h3>
                 <div class="box-tools">
                 </div>
             </div>
 
-            <div class="box-body">
+            <div class="card-body">
 
                 <p style='font-weight: bold' id='status-import'><i class='fa fa-spin fa-spinner'></i> Please wait
                     importing...</p>
@@ -73,7 +73,8 @@
 
                             }, 2500);
 
-                            $.post("{{ CRUDBooster::mainpath('do-import-chunk') . '?file=' . Request::get('file') }}", function(resp) {
+                            $.post("{{ CRUDBooster::mainpath('do-import-chunk') . '?file=' . Request::get('file') }}", function(
+                                resp) {
                                 if (resp.status == true) {
                                     $('#progress-import').css('width', '100%');
                                     $('#progress-import').attr('aria-valuenow', 100);
@@ -89,34 +90,35 @@
                     </script>
                 @endpush
 
-            </div><!-- /.box-body -->
+            </div><!-- /.card-body -->
 
-            <div class="box-footer" id='upload-footer' style="display:none">
-                <div class='pull-right'>
+            <div class="card-footer" id='upload-footer' style="display:none">
+                <div class='float-end'>
                     <a href='{{ CRUDBooster::mainpath('import-data') }}' class='btn btn-default'><i
                             class='fa fa-upload'></i> Upload Other File</a>
                     <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-success'>Finish</a>
                 </div>
-            </div><!-- /.box-footer-->
+            </div><!-- /.card-footer-->
 
-        </div><!-- /.box -->
+        </div><!-- /.card -->
     @endif
 
     @if (Request::get('file') && !Request::get('import'))
         <ul class='nav nav-tabs'>
-            <li style="background:#eeeeee"><a style="color:#111"
+            <li class="nav-item"><a class="nav-link" style="color:#111"
                     onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath('import-data') }}'"
                     href='javascript:;'><i class='fa fa-download'></i> Upload a File &raquo;</a></li>
-            <li style="background:#ffffff" class='active'><a style="color:#111" href='#'><i class='fa fa-cogs'></i>
+            <li class="nav-item"><a class="nav-link active" style="color:#111" href='#'><i class='fa fa-cogs'></i>
                     Adjustment &raquo;</a></li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cloud-download'></i>
+            <li class="nav-item"><a class="nav-link" style="color:#111" href='#'><i
+                        class='fa fa-cloud-download-alt'></i>
                     Importing &raquo;</a></li>
         </ul>
 
         <!-- Box -->
-        <div id='box_main' class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">Adjustment</h3>
+        <div id='box_main' class="card">
+            <div class="card-header with-border">
+                <h3 class="card-title">Adjustment</h3>
                 <div class="box-tools">
 
                 </div>
@@ -134,7 +136,7 @@
 
             <form method='post' id="form" enctype="multipart/form-data" action='{{ $action }}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <div class="box-body table-responsive no-padding">
+                <div class="card-body table-responsive p-0">
                     <div class='callout callout-info'>
                         * Just ignoring the column where you are not sure the data is suit with the column or not.<br />
                         * Warning !, Unfortunately at this time, the system can't import column that contains image or photo
@@ -148,9 +150,9 @@
                             }
                         </style>
                     @endpush
-                    <table class='table table-bordered' style="width:130%">
+                    <table class='table table-bordered'>
                         <thead>
-                            <tr class='success'>
+                            <tr class='table-success'>
                                 @foreach ($table_columns as $k => $column)
                                     <?php
                                     $help = '';
@@ -175,7 +177,7 @@
                                         continue;
                                     } ?>
                                     <td data-no-column='{{ $k }}'>
-                                        <select style='width:120px' class='form-control select_column'
+                                        <select style='width:120px' class='form-select select_column'
                                             name='select_column[{{ $k }}]'>
                                             <option value=''>** Set Column for {{ $column }}</option>
                                             @foreach ($data_import_column as $import_column)
@@ -189,7 +191,7 @@
                     </table>
 
 
-                </div><!-- /.box-body -->
+                </div><!-- /.card-body -->
 
                 @push('bottom')
                     <script nonce="{{ config('view.script_nonce', '') }}" type="text/javascript">
@@ -220,33 +222,35 @@
                     </script>
                 @endpush
 
-                <div class="box-footer">
-                    <div class='pull-right'>
+                <div class="card-footer">
+                    <div class='float-end'>
                         <a onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath('import-data') }}'"
                             href='javascript:;' class='btn btn-default'>Cancel</a>
                         <input type='submit' class='btn btn-primary' name='submit'
                             onclick='return check_selected_column()' value='Import Data' />
                     </div>
-                </div><!-- /.box-footer-->
+                </div><!-- /.card-footer-->
             </form>
-        </div><!-- /.box -->
+        </div><!-- /.card -->
     @endif
 
     @if (!Request::get('file'))
         <ul class='nav nav-tabs'>
-            <li style="background:#ffffff" class='active'><a style="color:#111"
+            <li class='nav-item'><a class="nav-link active" style="color:#111"
                     onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath('import-data') }}'"
                     href='javascript:;'><i class='fa fa-download'></i> Upload a File &raquo;</a></li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cogs'></i> Adjustment
+            <li class='nav-item'><a class="nav-link" style="color:#111" href='#'><i class='fa fa-cogs'></i>
+                    Adjustment
                     &raquo;</a></li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cloud-download'></i>
+            <li class='nav-item'><a class="nav-link" style="color:#111" href='#'><i
+                        class='fa fa-cloud-download-alt'></i>
                     Importing &raquo;</a></li>
         </ul>
 
         <!-- Box -->
-        <div id='box_main' class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">Upload a File</h3>
+        <div id='box_main' class="card">
+            <div class="card-header with-border">
+                <h3 class="card-title">Upload a File</h3>
                 <div class="box-tools">
 
                 </div>
@@ -264,7 +268,7 @@
 
             <form method='post' id="form" enctype="multipart/form-data" action='{{ $action }}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <div class="box-body">
+                <div class="card-body">
 
                     <div class='callout callout-success'>
                         <h4>Welcome to Data Importer Tool</h4>
@@ -284,16 +288,16 @@
                         <input type='file' name='userfile' class='form-control' required />
                         <div class='help-block'>File type supported only : XLS, XLSX, CSV</div>
                     </div>
-                </div><!-- /.box-body -->
+                </div><!-- /.card-body -->
 
-                <div class="box-footer">
-                    <div class='pull-right'>
+                <div class="card-footer">
+                    <div class='float-end'>
                         <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
                         <input type='submit' class='btn btn-primary' name='submit' value='Upload' />
                     </div>
-                </div><!-- /.box-footer-->
+                </div><!-- /.card-footer-->
             </form>
-        </div><!-- /.box -->
+        </div><!-- /.card -->
     @endif
     </div><!-- /.col -->
 

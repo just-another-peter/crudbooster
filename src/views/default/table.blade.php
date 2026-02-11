@@ -132,8 +132,8 @@
                         }
                         
                         @eval("if($query) {
-                                                              \$tr_color = \$color;
-                                                          }");
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \$tr_color = \$color;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }");
                         ?>
                     @endforeach
                     <?php echo "<tr class='$tr_color'>"; ?>
@@ -186,15 +186,19 @@
 
 </form><!--END FORM TABLE-->
 
-<div class="col-md-8">{!! urldecode(str_replace('/?', '?', $result->appends(Request::all())->render())) !!}</div>
-<?php
-$from = $result->count() ? $result->perPage() * $result->currentPage() - $result->perPage() + 1 : 0;
-$to = $result->perPage() * $result->currentPage() - $result->perPage() + $result->count();
-$total = $result->total();
-?>
-<div class="col-md-4"><span class="pull-right">{{ cbLang('filter_rows_total') }}
-        : {{ $from }} {{ cbLang('filter_rows_to') }} {{ $to }} {{ cbLang('filter_rows_of') }}
-        {{ $total }}</span></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">{!! urldecode(str_replace('/?', '?', $result->appends(Request::all())->render())) !!}</div>
+        <?php
+        $from = $result->count() ? $result->perPage() * $result->currentPage() - $result->perPage() + 1 : 0;
+        $to = $result->perPage() * $result->currentPage() - $result->perPage() + $result->count();
+        $total = $result->total();
+        ?>
+        <div class="col-md-4 float-end"><span>{{ cbLang('filter_rows_total') }}
+                : {{ $from }} {{ cbLang('filter_rows_to') }} {{ $to }}
+                {{ cbLang('filter_rows_of') }} {{ $total }}</span></div>
+    </div>
+</div>
 
 @if ($columns)
     @push('bottom')
@@ -215,13 +219,13 @@ $total = $result->total();
                         $("#advanced_export").slideDown();
                         $(this).html(
                             "<i class='fa fa-minus-square-o'></i> {{ cbLang('export_dialog_show_advanced') }}"
-                            );
+                        );
                         toggle_advanced_report_boolean = 0;
                     } else {
                         $("#advanced_export").slideUp();
                         $(this).html(
                             "<i class='fa fa-plus-square-o'></i> {{ cbLang('export_dialog_show_advanced') }}"
-                            );
+                        );
                         toggle_advanced_report_boolean = 1;
                     }
 
@@ -301,12 +305,12 @@ $total = $result->total();
                         case 'in':
                             filter_value.prop('disabled', false).attr('placeholder',
                                 '{{ cbLang('filter_eg') }} : {{ cbLang('filter_lorem_ipsum_dolor_sit') }}'
-                                );
+                            );
                             break;
                         case 'not in':
                             filter_value.prop('disabled', false).attr('placeholder',
                                 '{{ cbLang('filter_eg') }} : {{ cbLang('filter_lorem_ipsum_dolor_sit') }}'
-                                );
+                            );
                             break;
                         case 'between':
                             filter_value.val('').hide();
@@ -328,12 +332,12 @@ $total = $result->total();
 
         <!-- MODAL FOR SORTING DATA-->
         <div class="modal fade" tabindex="-1" role="dialog" id='advanced_filter_modal'>
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button class="close" aria-label="Close" type="button" data-dismiss="modal">
-                            <span aria-hidden="true">×</span></button>
                         <h4 class="modal-title"><i class='fa fa-filter'></i> {{ cbLang('filter_dialog_title') }}</h4>
+                        <button class="close" aria-label="Close" type="button" data-bs-dismiss="modal">
+                            <span aria-hidden="true">×</span></button>
                     </div>
                     <form method='get' action=''>
                         <div class="modal-body">
@@ -352,7 +356,7 @@ $total = $result->total();
 
                                     <div class='col-sm-3'>
                                         <select name='filter_column[{{ $col['field_with'] }}][type]'
-                                            data-type='{{ $col['type_data'] }}' class="filter-combo form-control">
+                                            data-type='{{ $col['type_data'] }}' class="filter-combo form-select">
                                             <option value=''>** {{ cbLang('filter_select_operator_type') }}</option>
                                             @if (in_array($col['type_data'], ['string', 'varchar', 'text', 'char']))
                                                 <option
@@ -514,7 +518,7 @@ $total = $result->total();
 
 
                                     <div class='col-sm-2'>
-                                        <select class='form-control'
+                                        <select class='form-select'
                                             name='filter_column[{{ $col['field_with'] }}][sorting]'>
                                             <option value=''>{{ cbLang('filter_sorting') }}</option>
                                             <option
@@ -534,7 +538,7 @@ $total = $result->total();
                         </div>
                         <div class="modal-footer" align="right">
                             <button class="btn btn-default" type="button"
-                                data-dismiss="modal">{{ cbLang('button_close') }}</button>
+                                data-bs-dismiss="modal">{{ cbLang('button_close') }}</button>
                             <button class="btn btn-default btn-reset" type="reset"
                                 onclick='location.href="{{ Request::get('lasturl') }}"'>{{ cbLang('button_reset') }}</button>
                             <button class="btn btn-primary btn-submit"
@@ -567,13 +571,13 @@ $total = $result->total();
                         $("#advanced_export").slideDown();
                         $(this).html(
                             "<i class='fa fa-minus-square-o'></i> {{ cbLang('export_dialog_show_advanced') }}"
-                            );
+                        );
                         toggle_advanced_report_boolean = 0;
                     } else {
                         $("#advanced_export").slideUp();
                         $(this).html(
                             "<i class='fa fa-plus-square-o'></i> {{ cbLang('export_dialog_show_advanced') }}"
-                            );
+                        );
                         toggle_advanced_report_boolean = 1;
                     }
 
@@ -583,15 +587,16 @@ $total = $result->total();
 
         <!-- MODAL FOR EXPORT DATA-->
         <div class="modal fade" tabindex="-1" role="dialog" id='export-data'>
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button class="close" aria-label="Close" type="button" data-dismiss="modal">
-                            <span aria-hidden="true">×</span></button>
                         <h4 class="modal-title"><i class='fa fa-download'></i> {{ cbLang('export_dialog_title') }}</h4>
+                        <button class="close" aria-label="Close" type="button" data-bs-dismiss="modal">
+                            <span aria-hidden="true">×</span></button>
                     </div>
 
-                    <form method='post' target="_blank" action='{{ CRUDBooster::mainpath('export-data?t=' . time()) }}'>
+                    <form method='post' target="_blank"
+                        action='{{ CRUDBooster::mainpath('export-data?t=' . time()) }}'>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         {!! CRUDBooster::getUrlParameters() !!}
                         <div class="modal-body">
@@ -621,7 +626,7 @@ $total = $result->total();
 
                             <div class="form-group">
                                 <label>{{ cbLang('export_dialog_format_export') }}</label>
-                                <select name='fileformat' class='form-control'>
+                                <select name='fileformat' class='form-select'>
                                     <option value='pdf'>PDF</option>
                                     <option value='xls'>Microsoft Excel (xls)</option>
                                     <option value='csv'>CSV</option>
@@ -637,7 +642,7 @@ $total = $result->total();
 
                                 <div class="form-group">
                                     <label>{{ cbLang('export_dialog_page_size') }}</label>
-                                    <select class='form-control' name='page_size'>
+                                    <select class='form-select' name='page_size'>
                                         <option
                                             <?= optional($setting ?? false)->default_paper_size == 'Letter' ? 'selected' : '' ?>
                                             value='Letter'>Letter</option>
@@ -667,7 +672,7 @@ $total = $result->total();
 
                                 <div class="form-group">
                                     <label>{{ cbLang('export_dialog_page_orientation') }}</label>
-                                    <select class='form-control' name='page_orientation'>
+                                    <select class='form-select' name='page_orientation'>
                                         <option value='potrait'>Potrait</option>
                                         <option value='landscape'>Landscape</option>
                                     </select>
@@ -677,7 +682,7 @@ $total = $result->total();
                         </div>
                         <div class="modal-footer" align="right">
                             <button class="btn btn-default" type="button"
-                                data-dismiss="modal">{{ cbLang('button_close') }}</button>
+                                data-bs-dismiss="modal">{{ cbLang('button_close') }}</button>
                             <button class="btn btn-primary btn-submit"
                                 type="submit">{{ cbLang('button_submit') }}</button>
                         </div>

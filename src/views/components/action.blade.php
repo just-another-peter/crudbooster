@@ -52,10 +52,10 @@
         }
 
         @eval("if($query) {
-          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target'><i class='\$icon'></i> $label</a>&nbsp;\";
+          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target'><i class='\$icon'></i> $label</a>\";
       }");
     } else {
-        echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target'><i class='$icon'></i> $label</a>&nbsp;";
+        echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target'><i class='$icon'></i> $label</a>";
     }
     ?>
 @endforeach
@@ -89,7 +89,7 @@
     @if(CRUDBooster::isUpdate() && $button_edit)
         <a class='btn btn-xs btn-success btn-edit' title='{{cbLang("action_edit_data")}}'
            href='{{CRUDBooster::mainpath("edit/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field }}'><i
-                    class='fa fa-pencil'></i> {{cbLang("action_edit_data")}}</a>
+                    class='fa fa-pen'></i> {{cbLang("action_edit_data")}}</a>
     @endif
 
     @if(CRUDBooster::isDelete() && $button_delete)
@@ -102,7 +102,7 @@
 
     <div class='btn-group btn-group-action'>
         <button type='button' class='btn btn-xs btn-primary btn-action'>{{cbLang("action_label")}}</button>
-        <button type='button' class='btn btn-xs btn-primary dropdown-toggle' data-toggle='dropdown'>
+        <button type='button' class='btn btn-xs btn-primary dropdown-toggle' data-bs-toggle="dropdown">
             <span class='caret'></span>
             <span class='sr-only'>Toggle Dropdown</span>
         </button>
@@ -144,7 +144,7 @@
             @if(CRUDBooster::isUpdate() && $button_edit)
                 <li><a class='btn-edit' title='{{cbLang("action_edit_data")}}'
                        href='{{CRUDBooster::mainpath("edit/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field}}'><i
-                                class='fa fa-pencil'></i> {{cbLang("action_edit_data")}}</a></li>
+                                class='fa fa-pen'></i> {{cbLang("action_edit_data")}}</a></li>
             @endif
 
             @if(CRUDBooster::isDelete() && $button_delete)
@@ -165,7 +165,7 @@
     @if(CRUDBooster::isUpdate() && $button_edit)
         <a class='btn btn-xs btn-success btn-edit' title='{{cbLang("action_edit_data")}}'
            href='{{CRUDBooster::mainpath("edit/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field}}'><i
-                    class='fa fa-pencil'></i></a>
+                    class='fa fa-pen'></i></a>
     @endif
 
     @if(CRUDBooster::isDelete() && $button_delete)

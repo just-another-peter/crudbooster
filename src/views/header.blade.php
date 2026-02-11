@@ -1,93 +1,126 @@
 <!-- Main Header -->
 <header class="main-header">
 
-    <!-- Logo -->
-    <a href="{{url(config('crudbooster.ADMIN_PATH'))}}" title='{{Session::get('appname')}}' class="logo">{{CRUDBooster::getSetting('appname')}}</a>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand navbar-success navbar-dark">
 
-    <!-- Header Navbar -->
-    <nav class="navbar navbar-static-top" role="navigation">
-        <!-- Sidebar toggle button-->
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Toggle navigation</span>
-        </a>
-        <!-- Navbar Right Menu -->
-        <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <!-- Sidebar toggle button -->
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+                    <i class="fas fa-bars"></i>
+                </a>
+            </li>
+        </ul>
 
-                <li class="dropdown notifications-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" title='Notifications' aria-expanded="false">
-                        <i id='icon_notification' class="fa fa-bell-o"></i>
-                        <span id='notification_count' class="label label-danger" style="display:none">0</span>
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+
+            <!-- Notifications Menu -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" 
+                   data-bs-toggle="dropdown" 
+                   href="#" 
+                   title="{{ cbLang('Notifications') }}">
+                    <i id="icon_notification" class="far fa-bell"></i>
+                    <span id="notification_count" 
+                          class="badge badge-danger navbar-badge" 
+                          style="display:none">0</span>
+                </a>
+                
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px">
+                    <span class="dropdown-item dropdown-header">
+                        {{ cbLang("text_no_notification") }}
+                    </span>
+
+                    <div class="dropdown-divider"></div>
+
+                    <!-- Notification list container -->
+                    <div id="list_notifications" class="dropdown-body p-0">
+                        <!-- Items will be inserted here via JS -->
+                        <div class="text-center py-4 text-muted">
+                            {{ cbLang("text_no_notification") }}
+                        </div>
+                    </div>
+
+                    <div class="dropdown-divider"></div>
+
+                    <a href="{{ route('NotificationsControllerGetIndex') }}" 
+                       class="dropdown-item dropdown-footer">
+                        {{ cbLang("text_view_all_notification") }}
                     </a>
-                    <ul id='list_notifications' class="dropdown-menu">
-                        <li class="header">{{cbLang("text_no_notification")}}</li>
-                        <li>
-                            <!-- inner menu: contains the actual data -->
-                            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;">
-                                <ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
-                                    <li>
-                                        <a href="#">
-                                            <em>{{cbLang("text_no_notification")}}</em>
-                                        </a>
-                                    </li>
+                </div>
+            </li>
 
-                                </ul>
-                                <div class="slimScrollBar"
-                                     style="width: 3px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 195.122px; background: rgb(0, 0, 0);"></div>
-                                <div class="slimScrollRail"
-                                     style="width: 3px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div>
+            <!-- User Menu -->
+            <li class="nav-item dropdown user-menu">
+                <a href="#" 
+                   class="nav-link dropdown-toggle" 
+                   data-bs-toggle="dropdown">
+                    <img src="{{ CRUDBooster::myPhoto() }}" 
+                         class="user-image img-circle elevation-2" 
+                         alt="User Image">
+                    <span class="d-none d-md-inline">
+                        {{ CRUDBooster::myName() }}
+                    </span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px">
+                    <!-- User image & info -->
+                    <li class="user-header bg-success">
+                        <img src="{{ CRUDBooster::myPhoto() }}" 
+                             class="img-circle elevation-2" 
+                             alt="User Image">
+
+                        <p>
+                            {{ CRUDBooster::myName() }}
+                            <small>{{ CRUDBooster::myPrivilegeName() }}</small>
+                            <small>
+                                <i class="far fa-clock"></i> 
+                                <?php echo date('d F Y') ?>
+                            </small>
+                        </p>
+                    </li>
+
+                    <!-- Menu Footer -->
+                    <li class="user-footer">
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ route('AdminCmsUsersControllerGetProfile') }}" 
+                               class="btn btn-default btn-flat">
+                                <i class="fas fa-user mr-1"></i> 
+                                {{ cbLang("label_button_profile") }}
+                            </a>
+
+                            <div>
+                                <a href="{{ route('getLockScreen') }}" 
+                                   class="btn btn-default btn-flat" 
+                                   title="Lock Screen">
+                                    <i class="fas fa-lock"></i>
+                                </a>
+
+                                <a href="javascript:void(0)" 
+                                   onclick="swal({
+                                       title: '{{ cbLang('alert_want_to_logout') }}',
+                                       type: 'info',
+                                       showCancelButton: true,
+                                       allowOutsideClick: true,
+                                       confirmButtonColor: '#DD6B55',
+                                       confirmButtonText: '{{ cbLang('button_logout') }}',
+                                       cancelButtonText: '{{ cbLang('button_cancel') }}',
+                                       closeOnConfirm: false
+                                   }, function(){
+                                       location.href = '{{ route('getLogout') }}';
+                                   });" 
+                                   title="{{ cbLang('button_logout') }}"
+                                   class="btn btn-danger btn-flat">
+                                    <i class="fas fa-power-off"></i>
+                                </a>
                             </div>
-                        </li>
-                        <li class="footer"><a href="{{route('NotificationsControllerGetIndex')}}">{{cbLang("text_view_all_notification")}}</a></li>
-                    </ul>
-                </li>
+                        </div>
+                    </li>
+                </ul>
+            </li>
 
-                <!-- User Account Menu -->
-                <li class="dropdown user user-menu">
-                    <!-- Menu Toggle Button -->
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <!-- The user image in the navbar-->
-                        <img src="{{ CRUDBooster::myPhoto() }}" class="user-image" alt="User Image"/>
-                        <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs">{{ CRUDBooster::myName() }}</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <!-- The user image in the menu -->
-                        <li class="user-header">
-                            <img src="{{ CRUDBooster::myPhoto() }}" class="img-circle" alt="User Image"/>
-                            <p>
-                                {{ CRUDBooster::myName() }}
-                                <small>{{ CRUDBooster::myPrivilegeName() }}</small>
-                                <small><em><?php echo date('d F Y')?></em></small>
-                            </p>
-                        </li>
-
-                        <!-- Menu Footer-->
-                        <li class="user-footer">
-                            <div class="pull-{{ cbLang('left') }}">
-                                <a href="{{ route('AdminCmsUsersControllerGetProfile') }}" class="btn btn-default btn-flat"><i
-                                            class='fa fa-user'></i> {{cbLang("label_button_profile")}}</a>
-                            </div>
-                            <div class="pull-{{ cbLang('right') }}">
-                                <a title='Lock Screen' href="{{ route('getLockScreen') }}" class='btn btn-default btn-flat'><i class='fa fa-key'></i></a>
-                                <a href="javascript:void(0)" onclick="swal({
-                                        title: '{{cbLang('alert_want_to_logout')}}',
-                                        type:'info',
-                                        showCancelButton:true,
-                                        allowOutsideClick:true,
-                                        confirmButtonColor: '#DD6B55',
-                                        confirmButtonText: '{{cbLang('button_logout')}}',
-                                        cancelButtonText: '{{cbLang('button_cancel')}}',
-                                        closeOnConfirm: false
-                                        }, function(){
-                                        location.href = '{{ route("getLogout") }}';
-
-                                        });" title="{{cbLang('button_logout')}}" class="btn btn-danger btn-flat"><i class='fa fa-power-off'></i></a>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+        </ul>
     </nav>
 </header>

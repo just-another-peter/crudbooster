@@ -2,10 +2,12 @@
 
 @section('content')
     @push('head')
-        <link href="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+        {{-- <link href="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet"> --}}
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/libs/summernote-bs5.css') }}">
     @endpush
     @push('bottom')
-        <script src="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+        {{-- <script src="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script> --}}
+        <script type="text/javascript" src="{{ asset('vendor/crudbooster/assets/summernote/summernote-bs5.min.js') }}"></script>
         <script nonce="{{ config('view.script_nonce', '') }}" type="text/javascript">
             $(document).ready(function() {
                 $('.wysiwyg').summernote();
@@ -14,14 +16,18 @@
     @endpush
 
     <ul class="nav nav-tabs">
-        <li><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
-        <li><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
-        <li class='active'><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API
+                Documentation</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i>
+                API
+                Secret Key</a></li>
+        <li class="nav-item"><a class="nav-link active text-black" href="{{ CRUDBooster::mainpath('generator') }}"><i
+                    class='fa fa-cog'></i> API Generator</a></li>
     </ul>
 
-    <div class='box'>
+    <div class='card'>
 
-        <div class='box-body'>
+        <div class='card-body'>
             @push('bottom')
                 <script nonce="{{ config('view.script_nonce', '') }}">
                     $(function() {
@@ -111,23 +117,23 @@
 
                         no_params += 1;
                         $('#table-response tbody').append("<tr><td>" + no_params +
-                            "</td><td>api_status</td><td>boolean</td><td>-</td><td><select class='form-control' disabled><option>YES</option></select></td><td>-</td></tr>"
-                            );
+                            "</td><td>api_status</td><td>boolean</td><td>-</td><td><select class='form-select' disabled><option>YES</option></select></td><td>-</td></tr>"
+                        );
                         no_params += 1;
                         $('#table-response tbody').append("<tr><td>" + no_params +
-                            "</td><td>api_message</td><td>string</td><td>-</td><td><select class='form-control' disabled><option>YES</option></select></td><td>-</td></tr>"
-                            );
+                            "</td><td>api_message</td><td>string</td><td>-</td><td><select class='form-select' disabled><option>YES</option></select></td><td>-</td></tr>"
+                        );
 
                         if (tipe_action == 'list') {
                             $('#table-response tbody').append(
                                 "<tr class='info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>"
-                                );
+                            );
                         }
 
                         if (tipe_action == 'detail') {
                             $('#table-response tbody').append(
                                 "<tr class='info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>"
-                                );
+                            );
                         }
 
                         no_params = 0;
@@ -177,8 +183,8 @@
                                     "<input type='hidden' name='responses_name[]' value='" + obj.name +
                                     "'/></td><td>" + obj_type +
                                     "<input type='hidden' name='responses_type[]' value='" + obj_type +
-                                    "'/></td><td>-<input type='hidden' name='responses_subquery[]' value=''/></td><td><select class='form-control responses_used' name='responses_used[]'><option value='1'>YES</option><option value='0'>NO</option></select></td><td><a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a></td></tr>"
-                                    );
+                                    "'/></td><td>-<input type='hidden' name='responses_subquery[]' value=''/></td><td><select class='form-select responses_used' name='responses_used[]'><option value='1'>YES</option><option value='0'>NO</option></select></td><td><a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a></td></tr>"
+                                );
                             })
                         })
 
@@ -278,7 +284,7 @@
 
                                 $(this).find('.col-delete').html(
                                     "<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'><i class='fa fa-ban'></i></a>"
-                                    );
+                                );
                                 i += 1;
                             })
                         })
@@ -287,7 +293,7 @@
                     }
 
                     function init_data_parameters() {
-                        @if ($parameters)
+                        @if ($parameters ?? null)
 
                             var resp = {!! $parameters !!};
                             var tipe_action = $('#tipe_action').val();
@@ -362,7 +368,7 @@
 
                                 $(this).find('.col-delete').html(
                                     "<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'><i class='fa fa-ban'></i></a>"
-                                    );
+                                );
                                 i += 1;
                             })
 
@@ -372,7 +378,7 @@
 
 
                     function init_data_responses() {
-                        @if ($responses)
+                        @if ($responses ?? null)
 
                             var t = $('#combo_tabel').val();
                             var type = 'list';
@@ -385,17 +391,17 @@
 
                             no_params += 1;
                             $('#table-response tbody').append("<tr><td>" + no_params +
-                                "</td><td>api_status</td><td>boolean</td><td>-</td><td><select class='form-control' disabled><option>YES</option></select></td><td>-</td></tr>"
-                                );
+                                "</td><td>api_status</td><td>boolean</td><td>-</td><td><select class='form-select' disabled><option>YES</option></select></td><td>-</td></tr>"
+                            );
                             no_params += 1;
                             $('#table-response tbody').append("<tr><td>" + no_params +
-                                "</td><td>api_message</td><td>string</td><td>-</td><td><select class='form-control' disabled><option>YES</option></select></td><td>-</td></tr>"
-                                );
+                                "</td><td>api_message</td><td>string</td><td>-</td><td><select class='form-select' disabled><option>YES</option></select></td><td>-</td></tr>"
+                            );
 
                             if (tipe_action == 'list') {
                                 $('#table-response tbody').append(
                                     "<tr class='info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>"
-                                    );
+                                );
                             }
 
                             no_params = 0;
@@ -469,7 +475,7 @@
                                     "<input type='hidden' name='responses_name[]' value='" + obj.name + "'/></td><td>" +
                                     obj_type + "<input type='hidden' name='responses_type[]' value='" + obj_type +
                                     "'/></td><td>" + input_subquery +
-                                    "</td><td><select class='form-control responses_used' name='responses_used[]'><option " +
+                                    "</td><td><select class='form-select responses_used' name='responses_used[]'><option " +
                                     used_yes + " value='1'>YES</option><option " + used_no +
                                     " value='0'>NO</option></select></td><td>" + delete_btn + "</td></tr>");
                             })
@@ -480,7 +486,7 @@
 
                     $(function() {
 
-                        @if ($row)
+                        @if ($row ?? null)
                             init_data_parameters();
                             init_data_responses();
                         @endif
@@ -539,7 +545,7 @@
                             $(this).find('td:nth-child(1)').text(no_params);
                             $(this).find('.col-delete').html(
                                 "<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteParam(this)'><i class='fa fa-ban'></i></a>"
-                                );
+                            );
                         });
                     }
 
@@ -565,7 +571,7 @@
                             "'/></td><td>" + validation + "<input type='hidden' name='responses_type[]' value='" + validation +
                             "'/></td><td>" + subquery + "<input type='hidden' name='responses_subquery[]' value='" + subquery +
                             "'/></td>";
-                        htm += "<td><select class='form-control responses_used' name='responses_used[]'><option " + check_yes +
+                        htm += "<td><select class='form-select responses_used' name='responses_used[]'><option " + check_yes +
                             " value='1'>YES</option><option " + check_no + " value='0'>NO</option></select></td>";
                         htm +=
                             "<td><a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a></td></tr>";
@@ -594,7 +600,7 @@
                             $(this).find('td:nth-child(1)').text(no_params);
                             $(this).find('.col-delete').html(
                                 "<a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a>"
-                                );
+                            );
                         });
                     }
 
@@ -632,12 +638,12 @@
 
             <form method='post' action='{{ route('ApiCustomControllerPostSaveApiCustom') }}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                <input type="hidden" name="id" value="{{ $row->id }}">
+                <input type="hidden" name="id" value="{{ $row?->id }}">
                 <div class='row'>
                     <div class='col-sm-8'>
                         <div class='form-group'>
                             <label>API Name</label>
-                            <input type='text' class='form-control' value='{{ $row->nama }}' required name='nama'
+                            <input type='text' class='form-control' value='{{ $row?->nama }}' required name='nama'
                                 id='input-nama' />
                         </div>
                     </div>
@@ -645,10 +651,10 @@
                     <div class='col-sm-4'>
                         <div class='form-group'>
                             <label>Table</label>
-                            <select id='combo_tabel' name='tabel' required class='form-control'>
+                            <select id='combo_tabel' name='tabel' required class='form-select'>
                                 <option value=''>** Choose a Table</option>
                                 @foreach ($tables as $tab)
-                                    <option {{ $row->tabel == $tab ? 'selected' : '' }} value='{{ $tab }}'>
+                                    <option {{ $row?->tabel == $tab ? 'selected' : '' }} value='{{ $tab }}'>
                                         {{ $tab }}</option>
                                 @endforeach
                             </select>
@@ -661,9 +667,9 @@
                         <div class='form-group'>
                             <label>API Slug</label>
                             <div class='input-group'>
-                                <span class="input-group-addon" id="basic-addon1"
+                                <span class="input-group-text" id="basic-addon1"
                                     style="background:#eeeeee">{{ url('api') }}/</span>
-                                <input type='text' class='form-control' value='{{ $row->permalink }}' required
+                                <input type='text' class='form-control' value='{{ $row?->permalink }}' required
                                     name='permalink' id='input-permalink' />
                             </div>
                         </div>
@@ -671,14 +677,16 @@
                     <div class='col-sm-2'>
                         <div class='form-group'>
                             <label>Action Type</label>
-                            <select id='tipe_action' name='aksi' required class='form-control'>
+                            <select id='tipe_action' name='aksi' required class='form-select'>
                                 <option value=''>** Select Action</option>
-                                <option value='list' {{ $row->aksi == 'list' ? 'selected' : '' }}>LISTING</option>
-                                <option value='detail' {{ $row->aksi == 'detail' ? 'selected' : '' }}>DETAIL / READ</option>
-                                <option value='save_add' {{ $row->aksi == 'save_add' ? 'selected' : '' }}>CREATE / ADD
+                                <option value='list' {{ $row?->aksi == 'list' ? 'selected' : '' }}>LISTING</option>
+                                <option value='detail' {{ $row?->aksi == 'detail' ? 'selected' : '' }}>DETAIL / READ
                                 </option>
-                                <option value='save_edit' {{ $row->aksi == 'save_edit' ? 'selected' : '' }}>UPDATE</option>
-                                <option value='delete' {{ $row->aksi == 'delete' ? 'selected' : '' }}>DELETE</option>
+                                <option value='save_add' {{ $row?->aksi == 'save_add' ? 'selected' : '' }}>CREATE / ADD
+                                </option>
+                                <option value='save_edit' {{ $row?->aksi == 'save_edit' ? 'selected' : '' }}>UPDATE
+                                </option>
+                                <option value='delete' {{ $row?->aksi == 'delete' ? 'selected' : '' }}>DELETE</option>
                             </select>
                         </div>
                     </div>
@@ -688,12 +696,14 @@
                             <br />
                             <label class='radio-inline'>
                                 <input type='radio' required class='method_type'
-                                    {{ $row->method_type == 'get' ? 'checked' : '' }} name='method_type' value='get' />
+                                    {{ $row?->method_type == 'get' ? 'checked' : '' }} name='method_type' value='get' />
                                 GET
                             </label>
                             <label class='radio-inline'>
-                                <input type='radio' class='method_type' {{ $row->method_type == 'post' ? 'checked' : '' }}
-                                    name='method_type' value='post' /> POST
+                                <input type='radio' class='method_type'
+                                    {{ $row?->method_type == 'post' ? 'checked' : '' }} name='method_type'
+                                    value='post' />
+                                POST
                             </label>
 
                         </div>
@@ -704,8 +714,8 @@
                 <div class='form-group'>
                     <div class="clearfix">
                         <label><i class='fa fa-cog'></i> Parameters</label>
-                        <a class='pull-right btn btn-xs btn-primary' href='javascript:void(0)'
-                            onclick="load_parameters()"><i class='fa fa-refresh'></i>
+                        <a class='float-end btn btn-xs btn-primary' href='javascript:void(0)' onclick="load_parameters()"><i
+                                class='fa fa-refresh'></i>
                             Reset</a>
                     </div>
 
@@ -730,7 +740,7 @@
                             <tr>
                                 <td>#</td>
                                 <td width="20%"><input class='form-control' name='params_name[]' type='text' /></td>
-                                <td width="20%"><select class='form-control' name='params_type[]'>
+                                <td width="20%"><select class='form-select' name='params_type[]'>
                                         <optgroup label='Common Validation'>
                                             <option value='string'>String</option>
                                             <option value='integer'>Integer</option>
@@ -769,11 +779,11 @@
                                         </optgroup>
                                     </select></td>
                                 <td><input class='form-control' type='text' name='params_config[]'></td>
-                                <td><select class='form-control params_required' name='params_required[]'>
+                                <td><select class='form-select params_required' name='params_required[]'>
                                         <option value='1'>YES</option>
                                         <option value='0'>NO</option>
                                     </select></td>
-                                <td><select class='form-control params_used' name='params_used[]'>
+                                <td><select class='form-select params_used' name='params_used[]'>
                                         <option value='1'>YES</option>
                                         <option value='0'>NO</option>
                                     </select></td>
@@ -794,7 +804,7 @@
                     <div class='form-group'>
                         <div class='clearfix'>
                             <label><i class='fa fa-cog'></i> Response</label>
-                            <a class='pull-right btn btn-xs btn-primary' href='javascript:void(0)'
+                            <a class='float-end btn btn-xs btn-primary' href='javascript:void(0)'
                                 onclick='load_response()'><i class='fa fa-refresh'></i> Reset</a>
                         </div>
                         <div id='response'>
@@ -822,7 +832,7 @@
                                             <small>Enter alias name</small>
                                         </td>
                                         <td>
-                                            <select class='form-control' name='responses_type[]'>
+                                            <select class='form-select' name='responses_type[]'>
                                                 <option value='integer'>Integer</option>
                                                 <option value='boolean'>Boolean</option>
                                                 <option value='string'>String</option>
@@ -838,7 +848,7 @@
                                                 name='responses_subquery[]' class='form-control' type='text'>
                                             <small>Enter sub query without alias name</small>
                                         </td>
-                                        <td><select class='form-control responses_used' name='responses_used[]'>
+                                        <td><select class='form-select responses_used' name='responses_used[]'>
                                                 <option value='1'>YES</option>
                                                 <option value='0'>NO</option>
                                             </select></td>
@@ -853,7 +863,7 @@
 
                 <div class='form-group'>
                     <label>API Description</label>
-                    <textarea name='keterangan' rows='3' class='form-control wysiwyg' placeholder='Optional'>{{ $row->keterangan }}</textarea>
+                    <textarea name='keterangan' rows='3' class='form-control wysiwyg' placeholder='Optional'>{{ $row?->keterangan }}</textarea>
                 </div>
 
                 <div class='form-group'>
