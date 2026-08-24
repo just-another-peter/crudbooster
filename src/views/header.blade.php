@@ -98,19 +98,14 @@
                                     <i class="fas fa-lock"></i>
                                 </a>
 
-                                <a href="javascript:void(0)" 
-                                   onclick="swal({
-                                       title: '{{ cbLang('alert_want_to_logout') }}',
-                                       type: 'info',
-                                       showCancelButton: true,
-                                       allowOutsideClick: true,
-                                       confirmButtonColor: '#DD6B55',
-                                       confirmButtonText: '{{ cbLang('button_logout') }}',
-                                       cancelButtonText: '{{ cbLang('button_cancel') }}',
-                                       closeOnConfirm: false
-                                   }, function(){
-                                       location.href = '{{ route('getLogout') }}';
-                                   });" 
+                                <a href="#"
+                                   id="btn-logout"
+                                   data-confirm-title="{{ cbLang('alert_want_to_logout') }}"
+                                   data-confirm-type="info"
+                                   data-confirm-button-color="#DD6B55"
+                                   data-confirm-button-text="{{ cbLang('button_logout') }}"
+                                   data-confirm-cancel-text="{{ cbLang('button_cancel') }}"
+                                   data-confirm-url="{{ route('getLogout') }}"
                                    title="{{ cbLang('button_logout') }}"
                                    class="btn btn-danger btn-flat">
                                     <i class="fas fa-power-off"></i>
@@ -124,3 +119,24 @@
         </ul>
     </nav>
 </header>
+
+@push('bottom')
+<script nonce="{{ config('view.script_nonce', '') }}" type="text/javascript">
+    $(document).on('click', '#btn-logout', function (e) {
+        e.preventDefault();
+        var $el = $(this);
+        swal({
+            title: $el.data('confirm-title') || '',
+            type: $el.data('confirm-type') || 'info',
+            showCancelButton: true,
+            allowOutsideClick: true,
+            confirmButtonColor: $el.data('confirm-button-color') || '#DD6B55',
+            confirmButtonText: $el.data('confirm-button-text') || 'Logout',
+            cancelButtonText: $el.data('confirm-cancel-text') || 'Cancel',
+            closeOnConfirm: false
+        }, function () {
+            location.href = $el.data('confirm-url');
+        });
+    });
+</script>
+@endpush

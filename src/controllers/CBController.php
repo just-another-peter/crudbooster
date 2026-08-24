@@ -620,7 +620,7 @@ class CBController extends Controller
                 $parent_field = $parent_field ?? false;
 
                 $button_action_style = $this->button_action_style;
-                $html_content[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style', 'parent_field'))->render()."</div>";
+                $html_content[] = "<div class='button_action' id='button_action_".$row->{$tablePK}."' style='text-align:right'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style', 'parent_field'))->render()."</div>";
 
             endif;//button_table_action
 

@@ -4,7 +4,7 @@
         $a['url'] = str_replace("[".$key."]", $val, $a['url']);
     }
 
-    $confirm_box = '';
+    $confirm_attrs = '';
     if (isset($a['confirmation']) && ! empty($a['confirmation']) && $a['confirmation']) {
 
         $a['confirmation_title'] = ! empty($a['confirmation_title']) ? $a['confirmation_title'] : cbLang('confirmation_title');
@@ -12,23 +12,22 @@
         $a['confirmation_type'] = ! empty($a['confirmation_type']) ? $a['confirmation_type'] : 'warning';
         $a['confirmation_showCancelButton'] = empty($a['confirmation_showCancelButton']) ? 'true' : 'false';
         $a['confirmation_confirmButtonColor'] = ! empty($a['confirmation_confirmButtonColor']) ? $a['confirmation_confirmButtonColor'] : '#DD6B55';
-        $a['confirmation_confirmButtonText'] = ! empty($a['confirmation_confirmButtonText']) ? $a['confirmation_confirmButtonText'] : cbLang('confirmation_yes');;
-        $a['confirmation_cancelButtonText'] = ! empty($a['confirmation_cancelButtonText']) ? $a['confirmation_cancelButtonText'] : cbLang('confirmation_no');;
+        $a['confirmation_confirmButtonText'] = ! empty($a['confirmation_confirmButtonText']) ? $a['confirmation_confirmButtonText'] : cbLang('confirmation_yes');
+        $a['confirmation_cancelButtonText'] = ! empty($a['confirmation_cancelButtonText']) ? $a['confirmation_cancelButtonText'] : cbLang('confirmation_no');
         $a['confirmation_closeOnConfirm'] = empty($a['confirmation_closeOnConfirm']) ? 'true' : 'false';
 
-        $confirm_box = '
-        swal({   
-            title: "'.$a['confirmation_title'].'",
-            text: "'.$a['confirmation_text'].'",
-            type: "'.$a['confirmation_type'].'",
-            showCancelButton: '.$a['confirmation_showCancelButton'].',
-            confirmButtonColor: "'.$a['confirmation_confirmButtonColor'].'",
-            confirmButtonText: "'.$a['confirmation_confirmButtonText'].'",
-            cancelButtonText: "'.$a['confirmation_cancelButtonText'].'",
-            closeOnConfirm: '.$a['confirmation_closeOnConfirm'].', }, 
-            function(){  location.href="'.$a['url'].'"});        
-
-        ';
+        $confirm_attrs = sprintf(
+            " data-confirm-url='%s' data-confirm-title='%s' data-confirm-text='%s' data-confirm-type='%s' data-confirm-show-cancel='%s' data-confirm-button-color='%s' data-confirm-button-text='%s' data-confirm-cancel-text='%s' data-confirm-close-on-confirm='%s'",
+            htmlspecialchars($a['url'], ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($a['confirmation_title'], ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($a['confirmation_text'], ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($a['confirmation_type'], ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($a['confirmation_showCancelButton'], ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($a['confirmation_confirmButtonColor'], ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($a['confirmation_confirmButtonText'], ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($a['confirmation_cancelButtonText'], ENT_QUOTES, 'UTF-8'),
+            htmlspecialchars($a['confirmation_closeOnConfirm'], ENT_QUOTES, 'UTF-8')
+        );
     }
 
     $label = $a['label'];
@@ -40,7 +39,7 @@
 
     $url = $a['url'];
     if (isset($confirmation) && ! empty($confirmation)) {
-        $url = "javascript:;";
+        $url = '#';
     }
 
     if (isset($a['showIf'])) {
@@ -52,10 +51,10 @@
         }
 
         @eval("if($query) {
-          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target'><i class='\$icon'></i> $label</a>\";
+          echo \"<a class='btn btn-xs btn-\$color' title='\$title'\$confirm_attrs href='\$url' target='\$target'><i class='\$icon'></i> $label</a>\";
       }");
     } else {
-        echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target'><i class='$icon'></i> $label</a>";
+        echo "<a class='btn btn-xs btn-$color' title='$title'$confirm_attrs href='$url' target='$target'><i class='$icon'></i> $label</a>";
     }
     ?>
 @endforeach
@@ -74,8 +73,16 @@
 
     @if(CRUDBooster::isDelete() && $button_delete)
         <?php $url = CRUDBooster::mainpath("delete/".$row->$pk);?>
-        <a class='btn btn-xs btn-warning btn-delete' title='{{cbLang("action_delete_data")}}' href='javascript:;'
-           onclick='{{CRUDBooster::deleteConfirm($url)}}'>{{cbLang("action_delete_data")}}</a>
+        <a class='btn btn-xs btn-warning btn-delete' title='{{cbLang("action_delete_data")}}' href='#'
+           data-confirm-url='{{ $url }}'
+           data-confirm-title='{{ cbLang('delete_title_confirm') }}'
+           data-confirm-text='{{ cbLang('delete_description_confirm') }}'
+           data-confirm-type='warning'
+           data-confirm-show-cancel='true'
+           data-confirm-button-color='#ff0000'
+           data-confirm-button-text='{{ cbLang('confirmation_yes') }}'
+           data-confirm-cancel-text='{{ cbLang('confirmation_no') }}'
+           data-confirm-close-on-confirm='false'>{{cbLang("action_delete_data")}}</a>
     @endif
 @elseif($button_action_style == 'button_icon_text')
 
@@ -94,8 +101,16 @@
 
     @if(CRUDBooster::isDelete() && $button_delete)
         <?php $url = CRUDBooster::mainpath("delete/".$row->$pk);?>
-        <a class='btn btn-xs btn-warning btn-delete' title='{{cbLang("action_delete_data")}}' href='javascript:;'
-           onclick='{{CRUDBooster::deleteConfirm($url)}}'><i class='fa fa-trash'></i> {{cbLang("action_delete_data")}}</a>
+        <a class='btn btn-xs btn-warning btn-delete' title='{{cbLang("action_delete_data")}}' href='#'
+           data-confirm-url='{{ $url }}'
+           data-confirm-title='{{ cbLang('delete_title_confirm') }}'
+           data-confirm-text='{{ cbLang('delete_description_confirm') }}'
+           data-confirm-type='warning'
+           data-confirm-show-cancel='true'
+           data-confirm-button-color='#ff0000'
+           data-confirm-button-text='{{ cbLang('confirmation_yes') }}'
+           data-confirm-cancel-text='{{ cbLang('confirmation_no') }}'
+           data-confirm-close-on-confirm='false'><i class='fa fa-trash'></i> {{cbLang("action_delete_data")}}</a>
     @endif
 
 @elseif($button_action_style == 'dropdown')
@@ -149,8 +164,16 @@
 
             @if(CRUDBooster::isDelete() && $button_delete)
                 <?php $url = CRUDBooster::mainpath("delete/".$row->$pk);?>
-                <li><a class='btn-delete' title='{{cbLang("action_delete_data")}}' href='javascript:;'
-                       onclick='{{CRUDBooster::deleteConfirm($url)}}'><i class='fa fa-trash'></i> {{cbLang("action_delete_data")}}</a></li>
+                <li><a class='btn-delete' title='{{cbLang("action_delete_data")}}' href='#'
+                       data-confirm-url='{{ $url }}'
+                       data-confirm-title='{{ cbLang('delete_title_confirm') }}'
+                       data-confirm-text='{{ cbLang('delete_description_confirm') }}'
+                       data-confirm-type='warning'
+                       data-confirm-show-cancel='true'
+                       data-confirm-button-color='#ff0000'
+                       data-confirm-button-text='{{ cbLang('confirmation_yes') }}'
+                       data-confirm-cancel-text='{{ cbLang('confirmation_no') }}'
+                       data-confirm-close-on-confirm='false'><i class='fa fa-trash'></i> {{cbLang("action_delete_data")}}</a></li>
             @endif
         </ul>
     </div>
@@ -170,8 +193,40 @@
 
     @if(CRUDBooster::isDelete() && $button_delete)
         <?php $url = CRUDBooster::mainpath("delete/".$row->$pk);?>
-        <a class='btn btn-xs btn-warning btn-delete' title='{{cbLang("action_delete_data")}}' href='javascript:;'
-           onclick='{{CRUDBooster::deleteConfirm($url)}}'><i class='fa fa-trash'></i></a>
+        <a class='btn btn-xs btn-warning btn-delete' title='{{cbLang("action_delete_data")}}' href='#'
+           data-confirm-url='{{ $url }}'
+           data-confirm-title='{{ cbLang('delete_title_confirm') }}'
+           data-confirm-text='{{ cbLang('delete_description_confirm') }}'
+           data-confirm-type='warning'
+           data-confirm-show-cancel='true'
+           data-confirm-button-color='#ff0000'
+           data-confirm-button-text='{{ cbLang('confirmation_yes') }}'
+           data-confirm-cancel-text='{{ cbLang('confirmation_no') }}'
+           data-confirm-close-on-confirm='false'><i class='fa fa-trash'></i></a>
     @endif
 
 @endif
+
+<script nonce="{{ config('view.script_nonce', '') }}" type="text/javascript">
+    document.querySelector('#button_action_{{ $row->$pk }} a[data-confirm-url]')?.addEventListener('click', function (e) {
+        e.preventDefault();
+        var $el = $(this);
+        var toBool = function (v, fallback) {
+            if (v === undefined || v === null || v === '') return fallback;
+            if (typeof v === 'boolean') return v;
+            return String(v) !== 'false';
+        };
+        swal({
+            title: $el.data('confirm-title') || '',
+            text: $el.data('confirm-text') || '',
+            type: $el.data('confirm-type') || 'warning',
+            showCancelButton: toBool($el.data('confirm-show-cancel'), true),
+            confirmButtonColor: $el.data('confirm-button-color') || '#DD6B55',
+            confirmButtonText: $el.data('confirm-button-text') || 'Yes',
+            cancelButtonText: $el.data('confirm-cancel-text') || 'No',
+            closeOnConfirm: toBool($el.data('confirm-close-on-confirm'), true)
+        }, function () {
+                location.href = $el.data('confirm-url');
+            });
+        });
+</script>

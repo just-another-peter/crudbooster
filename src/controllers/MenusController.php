@@ -52,7 +52,7 @@ class MenusController extends CBController
         $this->script_js = "
 			$(function() {
 				var current_id = '$id';
-				var current_type = 'optional($row)->type';
+				var current_type = '".optional($row)->type."';
 				var type_menu = $('input[name=type]').val();
 				type_menu = (current_type)?current_type:type_menu;
 				if(type_menu == 'Module') {

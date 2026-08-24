@@ -38,10 +38,10 @@
 
             })
 
-            $('table tbody tr .button_action a').click(function(e) {
-                e.stopPropagation();
-            })
-        });
+        //     $('table tbody tr .button_action a').click(function(e) {
+        //         e.stopPropagation();
+        //     })
+        // });
     </script>
 @endpush
 
