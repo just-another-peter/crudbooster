@@ -51,6 +51,16 @@ if(!function_exists('assetThumbnail')) {
     }
 }
 
+if (!function_exists('cbImage')) {
+    function cbImage(string $path): \Intervention\Image\Interfaces\ImageInterface
+    {
+        static $manager;
+        $manager ??= new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+
+        return $manager->read($path);
+    }
+}
+
 if(!function_exists('assetResize')) {
     function assetResize($path,$width,$height=null,$quality=70) {
         $basename = basename($path);
@@ -59,8 +69,9 @@ if(!function_exists('assetResize')) {
         if(Storage::exists($newLocation)) {
             return asset($newLocation);
         }else{
-            $img = Image::make(storage_path($path))->fit($width,$height);
-            $img->save(storage_path($newLocation),$quality);
+            $img = cbImage(storage_path($path));
+            $img->cover((int) $width, (int) ($height ?: $width));
+            $img->save(storage_path($newLocation), quality: (int) $quality);
             return asset($newLocation);
         }
     }

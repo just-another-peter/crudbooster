@@ -4,7 +4,6 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use Cache;
 use DB;
-use Image;
 use Request;
 use Route;
 use Schema;
@@ -110,36 +109,31 @@ class CRUDBooster
         Storage::makeDirectory($file_path_thumbnail);
 
         if (in_array(strtolower($ext), $images_ext)) {
+            $target = storage_path('app/'.$file_path.'/'.$filename);
 
             if ($resize_width && $resize_height) {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
-                $img->fit($resize_width, $resize_height);
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
+                $img = cbImage($target);
+                $img->cover((int) $resize_width, (int) $resize_height);
+                $img->save($target, quality: (int) $qty);
             } elseif ($resize_width && ! $resize_height) {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
-                $img->resize($resize_width, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
+                $img = cbImage($target);
+                $img->scale(width: (int) $resize_width);
+                $img->save($target, quality: (int) $qty);
             } elseif (! $resize_width && $resize_height) {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
-                $img->resize(null, $resize_height, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
+                $img = cbImage($target);
+                $img->scale(height: (int) $resize_height);
+                $img->save($target, quality: (int) $qty);
             } else {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
+                $img = cbImage($target);
                 if ($img->width() > 1300) {
-                    $img->resize(1300, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                    });
+                    $img->scale(width: 1300);
                 }
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
+                $img->save($target, quality: (int) $qty);
             }
 
-            $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
-            $img->fit(350, 350);
-            $img->save(storage_path('app/'.$file_path_thumbnail.'/'.$filename), $thumbQty);
+            $img = cbImage($target);
+            $img->cover(350, 350);
+            $img->save(storage_path('app/'.$file_path_thumbnail.'/'.$filename), quality: (int) $thumbQty);
         }
     }
 
@@ -955,11 +949,13 @@ class CRUDBooster
             return 'id';
         }
 
-        $pk = DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey();
-        if(!$pk) {
-            return null;
+        foreach (\Schema::getIndexes($table) as $index) {
+            if (! empty($index['primary'])) {
+                return $index['columns'][0] ?? null;
+            }
         }
-        return $pk->getColumns()[0];
+
+        return null;
     }
 
     public static function newId($table)

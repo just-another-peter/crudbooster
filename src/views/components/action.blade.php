@@ -208,7 +208,8 @@
 @endif
 
 <script nonce="{{ config('view.script_nonce', '') }}" type="text/javascript">
-    document.querySelector('#button_action_{{ $row->$pk }} a[data-confirm-url]')?.addEventListener('click', function (e) {
+    document.querySelectorAll('#button_action_{{ $row->$pk }} a[data-confirm-url]').forEach(function (el) {
+        el.addEventListener('click', function (e) {
         e.preventDefault();
         var $el = $(this);
         var toBool = function (v, fallback) {
@@ -229,4 +230,5 @@
                 location.href = $el.data('confirm-url');
             });
         });
+    });
 </script>
