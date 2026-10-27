@@ -716,13 +716,24 @@ class CRUDBooster
         return $string ? implode(', ', $string).' ' : 'just now';
     }
 
+    private static function useCmsMailConfig()
+    {
+        $driver = self::getSetting('smtp_driver') ?: 'smtp';
+        if ($driver === 'mail') {
+            $driver = 'sendmail';
+        }
+
+        \Config::set('mail.default', $driver);
+        \Config::set('mail.mailers.smtp.host', self::getSetting('smtp_host'));
+        \Config::set('mail.mailers.smtp.port', self::getSetting('smtp_port'));
+        \Config::set('mail.mailers.smtp.username', self::getSetting('smtp_username'));
+        \Config::set('mail.mailers.smtp.password', self::getSetting('smtp_password'));
+        \Mail::purge($driver);
+    }
+
     public static function sendEmailQueue($queue)
     {
-        \Config::set('mail.driver', self::getSetting('smtp_driver'));
-        \Config::set('mail.host', self::getSetting('smtp_host'));
-        \Config::set('mail.port', self::getSetting('smtp_port'));
-        \Config::set('mail.username', self::getSetting('smtp_username'));
-        \Config::set('mail.password', self::getSetting('smtp_password'));
+        self::useCmsMailConfig();
 
         $html = $queue->email_content;
         $to = $queue->email_recipient;
@@ -759,11 +770,7 @@ class CRUDBooster
     public static function sendEmail($config = [])
     {
 
-        \Config::set('mail.driver', self::getSetting('smtp_driver'));
-        \Config::set('mail.host', self::getSetting('smtp_host'));
-        \Config::set('mail.port', self::getSetting('smtp_port'));
-        \Config::set('mail.username', self::getSetting('smtp_username'));
-        \Config::set('mail.password', self::getSetting('smtp_password'));
+        self::useCmsMailConfig();
 
         $to = $config['to'];
         $data = $config['data'];

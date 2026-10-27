@@ -84,12 +84,6 @@ if(!function_exists('extract_unit')) {
 }
 
 
-if(!function_exists('now')) {
-    function now() {
-        return date('Y-m-d H:i:s');
-    }
-}
-
 /* 
 | --------------------------------------------------------------------------------------------------------------
 | Get data from input post/get more simply
