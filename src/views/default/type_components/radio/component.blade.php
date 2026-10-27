@@ -95,7 +95,7 @@
                 }
             endif;
             if ($form['dataquery'] ?? false) {
-                $query = DB::select(DB::raw($form['dataquery'] ?? false));
+                $query = DB::select($form['dataquery'] ?? false);
                 if ($query) {
                     foreach ($query as $q) {
                         $checked = $value == $q->value ? 'checked' : '';

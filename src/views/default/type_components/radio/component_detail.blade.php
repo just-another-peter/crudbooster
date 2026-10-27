@@ -24,7 +24,7 @@ if (($form['datatable'] ?? false) && ($form['relationship_table'] ?? false)) {
     }
 } elseif ($form['dataquery'] ?? false) {
     $dataquery = $form['dataquery'];
-    $query = DB::select(DB::raw($dataquery));
+    $query = DB::select($dataquery);
     if ($query) {
         foreach ($query as $q) {
             if ($q->value == $value) {
